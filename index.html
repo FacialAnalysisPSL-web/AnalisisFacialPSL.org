@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Análisis Facial Profesional</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="container">
+    <h1>Análisis de Armonía Facial</h1>
+
+    <div class="upload-box">
+        <label for="imageUpload" class="upload-label">Sube tu foto</label>
+        <input type="file" id="imageUpload" accept="image/*">
+    </div>
+
+    <div class="workspace">
+        <div class="image-area">
+            <img id="faceImage">
+            <canvas id="canvas"></canvas>
+        </div>
+
+        <div class="instruction-box">
+            <h3>Punto actual:</h3>
+            <p id="instruction">Sube una imagen para comenzar.</p>
+        </div>
+    </div>
+
+    <div class="buttons">
+        <button id="calculateBtn" style="display:none;">CALCULAR</button>
+        <button id="downloadCsvBtn" style="display:none;">DESCARGAR CSV</button>
+    </div>
+
+    <div id="results"></div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
