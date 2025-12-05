@@ -17,50 +17,48 @@ const pointNames = [
     "Parte izquierda del mentón","Parte derecha del mentón","Hairline / línea del cabello"
 ];
 
-// -------- CARGAR IMAGEN --------
-document.getElementById("imageUpload").addEventListener("change", loadImage);
-
-function loadImage(e) {
+// ---------- CARGAR IMAGEN ----------
+document.getElementById("imageUpload").addEventListener("change", function(e){
     const file = e.target.files[0];
-    if (!file) return;
+    if(!file) return;
     const reader = new FileReader();
-    reader.onload = function(evt) {
-        image.onload = function() {
-            image.style.display = "block";
-            setTimeout(() => {
-                canvas.width = image.clientWidth;
-                canvas.height = image.clientHeight;
-                canvas.style.width = image.clientWidth + "px";
-                canvas.style.height = image.clientHeight + "px";
-                canvas.style.display = "block";
-                points = [];
-                pointIndex = 0;
+    reader.onload = function(evt){
+        image.onload = function(){
+            image.style.display="block";
+            setTimeout(()=>{
+                canvas.width=image.clientWidth;
+                canvas.height=image.clientHeight;
+                canvas.style.width=image.clientWidth+"px";
+                canvas.style.height=image.clientHeight+"px";
+                canvas.style.display="block";
+                points=[];
+                pointIndex=0;
                 ctx.clearRect(0,0,canvas.width,canvas.height);
                 updateInstruction();
             },50);
         };
-        image.src = evt.target.result;
+        image.src=evt.target.result;
     };
     reader.readAsDataURL(file);
-}
+});
 
-// -------- PUNTOS --------
-canvas.addEventListener("click", function(event) {
-    if(pointIndex >= 22) return;
-    const rect = canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-    points.push({x, y});
-    drawPoint(x, y);
+// ---------- COLOCAR PUNTOS ----------
+canvas.addEventListener("click", function(event){
+    if(pointIndex>=22) return;
+    const rect=canvas.getBoundingClientRect();
+    const x=event.clientX-rect.left;
+    const y=event.clientY-rect.top;
+    points.push({x,y});
+    drawPoint(x,y);
     pointIndex++;
     updateInstruction();
-    if(pointIndex === 22) {
-        calculateBtn.style.display = "inline-block";
-        instruction.textContent = "Todos los puntos colocados. Presiona CALCULAR.";
+    if(pointIndex===22){
+        calculateBtn.style.display="inline-block";
+        instruction.textContent="Todos los puntos colocados. Presiona CALCULAR.";
     }
 });
 
-function drawPoint(x,y) {
+function drawPoint(x,y){
     ctx.fillStyle="red";
     ctx.beginPath();
     ctx.arc(x,y,7,0,Math.PI*2);
@@ -70,20 +68,18 @@ function drawPoint(x,y) {
     ctx.fillText(points.length, x+8, y-8);
 }
 
-function updateInstruction() {
-    if(pointIndex < 22){
+function updateInstruction(){
+    if(pointIndex<22){
         instruction.textContent=`Coloca: ${pointNames[pointIndex]}`;
     }
 }
 
-// -------- CÁLCULOS --------
+// ---------- CÁLCULOS ----------
 function dist(p1,p2){return Math.sqrt((p1.x-p2.x)**2+(p1.y-p2.y)**2);}
 function deviationPercent(value, ideal){return Math.abs(value-ideal)/ideal*100;}
 function penalty(basePts, dev){return basePts*(dev/100);}
 
-calculateBtn.addEventListener("click", calculateMetrics);
-
-function calculateMetrics(){
+calculateBtn.addEventListener("click", function(){
     let R="";
     let scores=[];
 
@@ -100,10 +96,10 @@ function calculateMetrics(){
             <p><b>Puntos base:</b> ${basePoints}</p>
             <p><b>Penalización:</b> -${pen.toFixed(3)}</p>
             <p><b>Puntaje final:</b> ${finalPts.toFixed(3)}</p>
-            <hr></div>`;
+        </div>`;
     }
 
-    // EJEMPLO MÉTRICAS (usa las fórmulas que ya me diste)
+    // --------- MÉTRICAS EJEMPLO ---------
     addMetric("Midface Ratio", Math.abs(points[16].y-((points[0].y+points[1].y)/2))/dist(points[0],points[1]),1.0,15);
     addMetric("FWHR", dist(points[12],points[13])/dist(points[9],points[16]),1.99,10);
     addMetric("Face Height", dist(points[21],points[18])/dist(points[12],points[13]),1.37,8);
@@ -118,23 +114,20 @@ function calculateMetrics(){
     const inter=dist(points[0],points[1]);
     addMetric("One-Eye Distance", eye_L/inter,1.0,13);
 
-    // Puntaje final promedio
     const avg=scores.reduce((a,b)=>a+b,0)/scores.length;
     R+=`<h2 style="color:#333;">Puntaje final promedio: ${avg.toFixed(2)}</h2>`;
     document.getElementById("results").innerHTML=R;
     downloadCsvBtn.style.display="inline-block";
-}
+});
 
-// DESCARGAR CSV
+// ---------- DESCARGAR CSV ----------
 downloadCsvBtn.addEventListener("click", function(){
-    const rows = document.querySelectorAll("#results .metric");
+    const rows=document.querySelectorAll("#results .metric");
     let csv="Métrica,Valor observado,Valor ideal,% desviación,Puntos base,Penalización,Puntaje final\n";
-
     rows.forEach(r=>{
         const p=r.querySelectorAll("p");
         csv+=`${r.querySelector("h3").innerText},${p[0].innerText.split(": ")[1]},${p[1].innerText.split(": ")[1]},${p[2].innerText.split(": ")[1]},${p[3].innerText.split(": ")[1]},${p[4].innerText.split(": ")[1]},${p[5].innerText.split(": ")[1]}\n`;
     });
-
     const blob=new Blob([csv],{type:"text/csv"});
     const url=URL.createObjectURL(blob);
     const a=document.createElement("a");
