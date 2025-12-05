@@ -3,25 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Análisis Facial Profesional</title>
+<title>Análisis de Armonía Facial</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <div class="container">
     <h1>Análisis de Armonía Facial</h1>
 
-    <div class="upload-box">
+    <div class="upload-section">
         <label for="imageUpload" class="upload-label">Sube tu foto</label>
         <input type="file" id="imageUpload" accept="image/*">
     </div>
 
     <div class="workspace">
-        <div class="image-area">
-            <img id="faceImage">
+        <div class="image-container">
+            <img id="faceImage" alt="Tu rostro">
             <canvas id="canvas"></canvas>
         </div>
-
-        <div class="instruction-box">
+        <div class="instructions">
             <h3>Punto actual:</h3>
             <p id="instruction">Sube una imagen para comenzar.</p>
         </div>
