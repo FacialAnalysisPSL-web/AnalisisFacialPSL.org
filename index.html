@@ -3,32 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Análisis de Armonía Facial</title>
+<title>Análisis Facial Profesional</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
 <div class="container">
     <h1>Análisis de Armonía Facial</h1>
 
     <div class="upload-section">
-        <label for="imageUpload" class="upload-label">Sube tu foto</label>
         <input type="file" id="imageUpload" accept="image/*">
     </div>
 
     <div class="workspace">
-        <div class="image-container">
+        <div class="image-wrapper">
             <img id="faceImage" alt="Tu rostro">
             <canvas id="canvas"></canvas>
         </div>
-        <div class="instructions">
-            <h3>Punto actual:</h3>
-            <p id="instruction">Sube una imagen para comenzar.</p>
+        <div class="sidebar">
+            <h2>Puntos a colocar</h2>
+            <p id="instruction">Sube una foto para empezar</p>
         </div>
     </div>
 
-    <div class="buttons">
-        <button id="calculateBtn" style="display:none;">CALCULAR</button>
-        <button id="downloadCsvBtn" style="display:none;">DESCARGAR CSV</button>
+    <div class="actions">
+        <button id="calculateBtn">CALCULAR</button>
+        <button id="downloadCsvBtn">DESCARGAR CSV</button>
     </div>
 
     <div id="results"></div>
